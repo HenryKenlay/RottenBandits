@@ -2,12 +2,13 @@ from tqdm import tqdm
 import numpy as np
 import pandas as pd
 
-def run_experiment(Bandit, Agent, experiment_name, T, experiment_repeats):
+def run_experiment(bandit, Agent, experiment_name, T, experiment_repeats):
     print('Running experiment {}'.format(experiment_name), flush=True)
     dfs = []
-    opt = np.cumsum(bandit_optimal_policy(Bandit, T)[1])
+    bandit.reset()
+    opt = np.cumsum(bandit_optimal_policy(bandit, T)[1])
     for i in tqdm(range(experiment_repeats), desc = 'Repeat# '):
-        bandit = Bandit()
+        bandit.reset()
         agent = Agent(bandit, T)
         agent.run_agent() 
         regret = opt - np.cumsum(agent.rewards)
@@ -16,10 +17,16 @@ def run_experiment(Bandit, Agent, experiment_name, T, experiment_repeats):
         t = list(range(T+1))
         repeats = [i for _ in range(T+1)]
         dfs.append(pd.DataFrame({'Algo' : algo, 'Repeat' : repeats, 't' : t, 'Regret' : regret}))
-    return pd.concat(dfs)
+    data = pd.concat(dfs)
+    data.to_csv('results/{}.csv.gzip'.format(experiment_name), compression = 'gzip')
+    return data
 
-def bandit_optimal_policy(Bandit, T):
-    bandit = Bandit()
+def compress_csv(experiment_name):
+    data = pd.read_csv('results/{}.csv'.format(experiment_name), index_col = 0)
+    data.to_csv('results/{}.csv.gzip'.format(experiment_name), compression = 'gzip')
+
+def bandit_optimal_policy(bandit, T):
+    bandit.reset()
     policy = []
     mean_rewards = []
     for i in range(T):
