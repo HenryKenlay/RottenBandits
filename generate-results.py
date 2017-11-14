@@ -1,5 +1,5 @@
 from Agents.NPC import SWA, wSWA
-from Agents.PC import CTO
+from Agents.PC import CTO, DCTO
 from Agents.Naive import Random, RoundRobin
 from Environments.RottenBandits import NonParametricRottenBandit, ParametricRottenBandit
 from utils import run_experiment
@@ -31,8 +31,10 @@ run_experiment(ParametricRottenBandit(seed = seed), wSWA, 'P-AV-wSWA', T, experi
 run_experiment(ParametricRottenBandit(ANV = True, seed = seed), SWA, 'P-ANV-SWA', T, experiment_repeats)
 run_experiment(ParametricRottenBandit(ANV = True, seed = seed), wSWA, 'P-ANV-wSWA', T, experiment_repeats)
 
-#%% CTO - this takes a very long time (~4 hours on macbook with i7)
+#%% CTO - this takes a very long time (~5-6 hours on macbook with i7)
 np.random.seed(seed)
 run_experiment(ParametricRottenBandit(), CTO, 'CTO', T, experiment_repeats)
 
-
+#%% DCTO - this takes a very long time (~5-6 hours on macbook with i7)
+np.random.seed(seed)
+run_experiment(ParametricRottenBandit(True), DCTO, 'DCTO', T, experiment_repeats)
