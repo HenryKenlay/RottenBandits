@@ -34,7 +34,10 @@ run_experiment(ParametricRottenBandit(ANV = True, seed = seed), wSWA, 'P-ANV-wSW
 #%% CTO - this takes a very long time (~5-6 hours on macbook with i7)
 np.random.seed(seed)
 run_experiment(ParametricRottenBandit(), CTO, 'CTO', T, experiment_repeats)
+run_experiment(ParametricRottenBandit(True), CTO, 'ANV-CTO', T, experiment_repeats)
 
 #%% DCTO - this takes a very long time (~5-6 hours on macbook with i7)
 np.random.seed(seed)
 run_experiment(ParametricRottenBandit(True), DCTO, 'DCTO', T, experiment_repeats)
+run_experiment(ParametricRottenBandit(), DCTO, 'AV-DCTO', T, experiment_repeats)
+
